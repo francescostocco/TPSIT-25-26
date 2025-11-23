@@ -62,7 +62,7 @@ class ChatClient {
       _socket.write(
           "Ciao, $nomeUtente! Ci sono ${clienti.length - 1} altri utenti online.\n");
 
-      distribuisciMessaggio(this, '$nomeUtente si è unito alla chat.');
+      distribuisciMessaggio(this, '$nomeUtente si e unito alla chat.');
     } else {
       String messaggioFormattato = '$nomeUtente: $messaggio';
       distribuisciMessaggio(this, messaggioFormattato);
