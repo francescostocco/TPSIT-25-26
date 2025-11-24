@@ -32,7 +32,7 @@ class _ChatPageState extends State<ChatPage> {
   // Connessione al server
   Future<void> connect() async {
     socket =
-        await Socket.connect("10.0.2.2", 3000); // <-- metti IP del COMPUTER
+        await Socket.connect("10.0.2.2", 3000); 
     setState(() => connected = true);
 
     socket!.listen((data) {
