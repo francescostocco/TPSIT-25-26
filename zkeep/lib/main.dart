@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Todo Keep',
+      title: 'ZKeep',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
       ),
@@ -35,7 +35,7 @@ class HomePage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Todo Keep"),
+        title: const Text("ZKeep"),
       ),
       body: GridView.builder(
         padding: const EdgeInsets.all(8),
@@ -43,6 +43,7 @@ class HomePage extends StatelessWidget {
           crossAxisCount: 2,
           crossAxisSpacing: 8,
           mainAxisSpacing: 8,
+          childAspectRatio: 0.7, // Card più alte
         ),
         itemCount: notifier.notes.length,
         itemBuilder: (context, index) {

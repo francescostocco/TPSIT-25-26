@@ -15,6 +15,11 @@ class NoteListNotifier with ChangeNotifier {
     notifyListeners();
   }
 
+  void deleteNote(Note note) {
+    _notes.remove(note);
+    notifyListeners();
+  }
+
   void addTodo(Note note) {
     note.todos.add(Todo(text: ""));
     notifyListeners();
@@ -32,6 +37,10 @@ class NoteListNotifier with ChangeNotifier {
 
   void deleteTodo(Note note, Todo todo) {
     note.todos.remove(todo);
+    // Se la nota rimane vuota, elimina l'intera card
+    if (note.todos.isEmpty) {
+      _notes.remove(note);
+    }
     notifyListeners();
   }
 }
