@@ -1,46 +1,74 @@
 import 'package:flutter/material.dart';
 import 'model.dart';
+import 'database_helper.dart';
 
 class NoteListNotifier with ChangeNotifier {
-  final List<Note> _notes = [];
+  List<Note> _notes = [];
+  bool _isLoading = false;
 
   List<Note> get notes => _notes;
+  bool get isLoading => _isLoading;
 
-  void addNote() {
-    _notes.add(
-      Note(
-        todos: [Todo(text: "NUOVO PROMEMORIA")],
-      ),
+  Future<void> loadNotes() async {
+    _isLoading = true;
+    notifyListeners();
+
+    _notes = await DatabaseHelper.getNotes();
+    
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> addNote() async {
+    Note newNote = Note(
+      todos: [Todo(text: "NUOVO PROMEMORIA")],
     );
-    notifyListeners();
+    
+    int noteId = await DatabaseHelper.insertNote(newNote);
+    newNote.id = noteId;
+    
+    await loadNotes();
   }
 
-  void deleteNote(Note note) {
-    _notes.remove(note);
-    notifyListeners();
+  Future<void> deleteNote(Note note) async {
+    await DatabaseHelper.deleteNote(note);
+    await loadNotes();
   }
 
-  void addTodo(Note note) {
-    note.todos.add(Todo(text: ""));
-    notifyListeners();
+  Future<void> addTodo(Note note) async {
+    if (note.id == null) return;
+
+    Todo newTodo = Todo(text: "");
+    await DatabaseHelper.insertTodo(note.id!, newTodo);
+    await loadNotes();
   }
 
-  void toggleTodo(Todo todo) {
+  Future<void> toggleTodo(Todo todo) async {
     todo.checked = !todo.checked;
-    notifyListeners();
+    await DatabaseHelper.updateTodo(todo);
+    notifyListeners(); 
   }
 
-  void updateTodo(Todo todo, String text) {
+  Future<void> updateTodo(Todo todo, String text) async {
     todo.text = text;
-    notifyListeners();
+    await DatabaseHelper.updateTodo(todo);
+    notifyListeners(); 
   }
 
-  void deleteTodo(Note note, Todo todo) {
+  Future<void> deleteTodo(Note note, Todo todo) async {
+    await DatabaseHelper.deleteTodo(todo);
+    
     note.todos.remove(todo);
-    // Se la nota rimane vuota, elimina l'intera card
+    
     if (note.todos.isEmpty) {
-      _notes.remove(note);
+      await DatabaseHelper.deleteNote(note);
     }
-    notifyListeners();
+    
+    await loadNotes();
+  }
+
+  Future<void> seedDatabase() async {
+    await DatabaseHelper.seedDatabase();
+    await loadNotes();
   }
 }

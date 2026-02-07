@@ -22,7 +22,6 @@ class NoteCard extends StatelessWidget {
         padding: const EdgeInsets.all(8),
         child: Column(
           children: [
-            /// Header fisso con titolo e cestino
             Row(
               children: [
                 Expanded(
@@ -39,7 +38,6 @@ class NoteCard extends StatelessWidget {
 
             const Divider(height: 16),
 
-            /// Lista Todo scrollabile (dal secondo elemento in poi)
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
@@ -51,7 +49,6 @@ class NoteCard extends StatelessWidget {
               ),
             ),
 
-            /// Bottone aggiungi Todo
             TextButton.icon(
               onPressed: () => notifier.addTodo(note),
               icon: const Icon(Icons.add),
@@ -65,7 +62,7 @@ class NoteCard extends StatelessWidget {
 }
 
 /// ======================
-/// TITLE ROW (titolo fisso)
+/// TITLE ROW 
 /// ======================
 class TitleRow extends StatefulWidget {
   const TitleRow({super.key, required this.todo});
@@ -162,13 +159,11 @@ class _TodoRowState extends State<TodoRow> {
 
     return Row(
       children: [
-        /// Checkbox per barrare singola nota
         Checkbox(
           value: widget.todo.checked,
           onChanged: (_) => notifier.toggleTodo(widget.todo),
         ),
 
-        /// Testo modificabile
         Expanded(
           child: editing
               ? TextField(
@@ -198,7 +193,6 @@ class _TodoRowState extends State<TodoRow> {
                 ),
         ),
 
-        /// Pulsante elimina singola nota
         IconButton(
           icon: const Icon(Icons.close, size: 18),
           onPressed: () => notifier.deleteTodo(widget.note, widget.todo),
