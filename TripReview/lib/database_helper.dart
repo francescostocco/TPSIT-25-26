@@ -2,10 +2,8 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'model.dart';
 
-/// Helper per il database SQLite locale.
-/// Stessa struttura di zkeep: metodi statici, apertura db a ogni chiamata.
-/// Usato come cache: i dati freschi dal server vengono scritti qui,
-/// e vengono letti quando il server non è raggiungibile.
+/// Helper per il database SQLite locale, usato come cache.
+/// Stesso stile di zkeep: metodi statici, apertura del db a ogni chiamata.
 class DatabaseHelper {
   static Future<Database> _open() async {
     final path = join(await getDatabasesPath(), 'tripreview.db');
@@ -30,12 +28,12 @@ class DatabaseHelper {
     ''');
 
     await db.execute('''
-      CREATE TABLE recensioni (
-        id          INTEGER PRIMARY KEY,
-        strutturaId INTEGER NOT NULL,
-        titolo      TEXT    NOT NULL,
-        descrizione TEXT    NOT NULL,
-        voto        INTEGER NOT NULL
+      CREATE TABLE preferiti (
+        id           INTEGER PRIMARY KEY,
+        strutturaId  INTEGER NOT NULL,
+        note         TEXT    NOT NULL,
+        priorita     TEXT    NOT NULL,
+        dataAggiunta TEXT    NOT NULL
       )
     ''');
   }
@@ -60,49 +58,33 @@ class DatabaseHelper {
     await batch.commit(noResult: true);
   }
 
-  static Future<void> upsertStruttura(Struttura s) async {
+  // ── PREFERITI ──────────────────────────────────────────────────────────────
+
+  static Future<List<Preferito>> getPreferiti() async {
     final db = await _open();
-    await db.insert('strutture', s.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace);
+    final rows = await db.query('preferiti');
+    return rows.map(Preferito.fromMap).toList();
   }
 
-  static Future<void> deleteStruttura(int id) async {
-    final db = await _open();
-    await db.delete('strutture', where: 'id = ?', whereArgs: [id]);
-    // Rimuove anche le recensioni associate
-    await db.delete('recensioni', where: 'strutturaId = ?', whereArgs: [id]);
-  }
-
-  // ── RECENSIONI ─────────────────────────────────────────────────────────────
-
-  static Future<List<Recensione>> getRecensioni(int strutturaId) async {
-    final db = await _open();
-    final rows = await db.query('recensioni',
-        where: 'strutturaId = ?', whereArgs: [strutturaId]);
-    return rows.map(Recensione.fromMap).toList();
-  }
-
-  static Future<void> saveRecensioni(
-      List<Recensione> recensioni, int strutturaId) async {
+  static Future<void> savePreferiti(List<Preferito> preferiti) async {
     final db = await _open();
     final batch = db.batch();
-    batch.delete('recensioni',
-        where: 'strutturaId = ?', whereArgs: [strutturaId]);
-    for (final r in recensioni) {
-      batch.insert('recensioni', r.toMap(),
+    batch.delete('preferiti');
+    for (final p in preferiti) {
+      batch.insert('preferiti', p.toMap(),
           conflictAlgorithm: ConflictAlgorithm.replace);
     }
     await batch.commit(noResult: true);
   }
 
-  static Future<void> upsertRecensione(Recensione r) async {
+  static Future<void> upsertPreferito(Preferito p) async {
     final db = await _open();
-    await db.insert('recensioni', r.toMap(),
+    await db.insert('preferiti', p.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  static Future<void> deleteRecensione(int id) async {
+  static Future<void> deletePreferito(int id) async {
     final db = await _open();
-    await db.delete('recensioni', where: 'id = ?', whereArgs: [id]);
+    await db.delete('preferiti', where: 'id = ?', whereArgs: [id]);
   }
 }

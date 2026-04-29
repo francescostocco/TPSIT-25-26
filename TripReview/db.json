@@ -1,0 +1,98 @@
+{
+  "strutture": [
+    {
+      "id": 1,
+      "nome": "Hotel Bellavista",
+      "tipo": "hotel",
+      "luogo": "Roma",
+      "stelle": 4,
+      "camere": 45,
+      "piscina": true,
+      "wifi": true,
+      "colazione": true,
+      "parcheggio": false,
+      "descrizione": "Elegante hotel nel cuore della capitale con vista panoramica sul Colosseo."
+    },
+    {
+      "id": 2,
+      "nome": "B&B Toscana Felice",
+      "tipo": "B&B",
+      "luogo": "Firenze",
+      "stelle": 3,
+      "camere": 6,
+      "piscina": false,
+      "wifi": true,
+      "colazione": true,
+      "parcheggio": true,
+      "descrizione": "Accogliente B&B a gestione familiare immerso nelle colline toscane."
+    },
+    {
+      "id": 3,
+      "nome": "Camping Verde Lago",
+      "tipo": "campeggio",
+      "luogo": "Lago di Garda",
+      "stelle": 3,
+      "camere": 80,
+      "piscina": true,
+      "wifi": true,
+      "colazione": false,
+      "parcheggio": true,
+      "descrizione": "Campeggio con piazzole e bungalow, accesso diretto al lago."
+    },
+    {
+      "id": 4,
+      "nome": "Appartamento Sole",
+      "tipo": "appartamento",
+      "luogo": "Amalfi",
+      "stelle": 5,
+      "camere": 3,
+      "piscina": false,
+      "wifi": true,
+      "colazione": false,
+      "parcheggio": false,
+      "descrizione": "Appartamento di lusso con terrazza e vista mozzafiato sulla costiera."
+    },
+    {
+      "id": 5,
+      "nome": "Grand Hotel Venezia",
+      "tipo": "hotel",
+      "luogo": "Venezia",
+      "stelle": 5,
+      "camere": 120,
+      "piscina": true,
+      "wifi": true,
+      "colazione": true,
+      "parcheggio": false,
+      "descrizione": "Hotel storico affacciato sul Canal Grande, lusso e tradizione veneziana."
+    },
+    {
+      "id": 6,
+      "nome": "Casa Vacanze Etna",
+      "tipo": "appartamento",
+      "luogo": "Catania",
+      "stelle": 4,
+      "camere": 4,
+      "piscina": true,
+      "wifi": true,
+      "colazione": false,
+      "parcheggio": true,
+      "descrizione": "Casa indipendente con vista sull'Etna e ampio giardino."
+    }
+  ],
+  "preferiti": [
+    {
+      "id": 1,
+      "strutturaId": 1,
+      "note": "Da prenotare per l'anniversario",
+      "priorita": "alta",
+      "dataAggiunta": "2024-01-15"
+    },
+    {
+      "id": 2,
+      "strutturaId": 4,
+      "note": "Idea per una fuga romantica",
+      "priorita": "media",
+      "dataAggiunta": "2024-02-03"
+    }
+  ]
+}

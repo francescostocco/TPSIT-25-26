@@ -1,6 +1,6 @@
-// ─── Modello Struttura ────────────────────────────────────────────────────────
+// ─── Modello Struttura (sola lettura dal server) ──────────────────────────────
 class Struttura {
-  int? id;
+  int id;
   String nome;
   String tipo;
   String luogo;
@@ -13,7 +13,7 @@ class Struttura {
   String descrizione;
 
   Struttura({
-    this.id,
+    required this.id,
     required this.nome,
     required this.tipo,
     required this.luogo,
@@ -27,7 +27,7 @@ class Struttura {
   });
 
   factory Struttura.fromJson(Map<String, dynamic> j) => Struttura(
-        id: j['id'] as int?,
+        id: j['id'] as int,
         nome: j['nome'] as String,
         tipo: j['tipo'] as String,
         luogo: j['luogo'] as String,
@@ -40,23 +40,9 @@ class Struttura {
         descrizione: j['descrizione'] as String,
       );
 
-  Map<String, dynamic> toJson() => {
-        if (id != null) 'id': id,
-        'nome': nome,
-        'tipo': tipo,
-        'luogo': luogo,
-        'stelle': stelle,
-        'camere': camere,
-        'piscina': piscina,
-        'wifi': wifi,
-        'colazione': colazione,
-        'parcheggio': parcheggio,
-        'descrizione': descrizione,
-      };
-
-  // Per SQLite i bool vengono salvati come 0/1
+  // Per SQLite i bool diventano 0/1
   Map<String, dynamic> toMap() => {
-        if (id != null) 'id': id,
+        'id': id,
         'nome': nome,
         'tipo': tipo,
         'luogo': luogo,
@@ -70,7 +56,7 @@ class Struttura {
       };
 
   factory Struttura.fromMap(Map<String, dynamic> m) => Struttura(
-        id: m['id'] as int?,
+        id: m['id'] as int,
         nome: m['nome'] as String,
         tipo: m['tipo'] as String,
         luogo: m['luogo'] as String,
@@ -84,39 +70,39 @@ class Struttura {
       );
 }
 
-// ─── Modello Recensione ───────────────────────────────────────────────────────
-class Recensione {
+// ─── Modello Preferito ────────────────────────────────────────────────────────
+class Preferito {
   int? id;
   int strutturaId;
-  String titolo;
-  String descrizione;
-  int voto; // 1–5
+  String note;          // nota personale dell'utente
+  String priorita;      // "alta" | "media" | "bassa"
+  String dataAggiunta;  // YYYY-MM-DD
 
-  Recensione({
+  Preferito({
     this.id,
     required this.strutturaId,
-    required this.titolo,
-    required this.descrizione,
-    required this.voto,
+    required this.note,
+    required this.priorita,
+    required this.dataAggiunta,
   });
 
-  factory Recensione.fromJson(Map<String, dynamic> j) => Recensione(
+  factory Preferito.fromJson(Map<String, dynamic> j) => Preferito(
         id: j['id'] as int?,
         strutturaId: j['strutturaId'] as int,
-        titolo: j['titolo'] as String,
-        descrizione: j['descrizione'] as String,
-        voto: j['voto'] as int,
+        note: j['note'] as String,
+        priorita: j['priorita'] as String,
+        dataAggiunta: j['dataAggiunta'] as String,
       );
 
   Map<String, dynamic> toJson() => {
         if (id != null) 'id': id,
         'strutturaId': strutturaId,
-        'titolo': titolo,
-        'descrizione': descrizione,
-        'voto': voto,
+        'note': note,
+        'priorita': priorita,
+        'dataAggiunta': dataAggiunta,
       };
 
   Map<String, dynamic> toMap() => toJson();
 
-  factory Recensione.fromMap(Map<String, dynamic> m) => Recensione.fromJson(m);
+  factory Preferito.fromMap(Map<String, dynamic> m) => Preferito.fromJson(m);
 }

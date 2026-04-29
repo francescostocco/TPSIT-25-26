@@ -1,5 +1,5 @@
 name: tripreview
-description: "App per consultare strutture turistiche con cache offline."
+description: "App per consultare strutture turistiche con sistema preferiti e cache offline."
 publish_to: 'none'
 
 version: 1.0.0+1
