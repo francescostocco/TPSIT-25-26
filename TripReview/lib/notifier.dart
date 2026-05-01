@@ -16,7 +16,7 @@ class StruttureNotifier with ChangeNotifier {
   bool get isOffline => _isOffline;
 
   /// Restituisce il preferito associato alla struttura, o null se non esiste.
-  Preferito? preferitoPer(int strutturaId) {
+  Preferito? preferitoPer(String strutturaId) {
     for (final p in _preferiti) {
       if (p.strutturaId == strutturaId) return p;
     }
@@ -24,16 +24,13 @@ class StruttureNotifier with ChangeNotifier {
   }
 
   /// Restituisce la struttura associata a un preferito.
-  Struttura? strutturaPer(int strutturaId) {
+  Struttura? strutturaPer(String strutturaId) {
     for (final s in _strutture) {
       if (s.id == strutturaId) return s;
     }
     return null;
   }
 
-  // ── CARICAMENTO ────────────────────────────────────────────────────────────
-
-  /// Carica strutture e preferiti, con fallback alla cache se offline.
   Future<void> loadAll() async {
     _isLoading = true;
     notifyListeners();
@@ -49,7 +46,6 @@ class StruttureNotifier with ChangeNotifier {
         await DatabaseHelper.savePreferiti(_preferiti);
         _isOffline = false;
       } catch (_) {
-        // Server non raggiungibile: fallback su cache
         _strutture = await DatabaseHelper.getStrutture();
         _preferiti = await DatabaseHelper.getPreferiti();
         _isOffline = true;
@@ -64,9 +60,6 @@ class StruttureNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  // ── PREFERITI CRUD ─────────────────────────────────────────────────────────
-
-  /// POST: aggiunge una struttura ai preferiti.
   Future<void> addPreferito(Preferito p) async {
     final saved = await ApiService.createPreferito(p);
     await DatabaseHelper.upsertPreferito(saved);
@@ -74,7 +67,6 @@ class StruttureNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  /// PUT: modifica completa di un preferito (note + priorità).
   Future<void> updatePreferito(Preferito p) async {
     final saved = await ApiService.updatePreferito(p);
     await DatabaseHelper.upsertPreferito(saved);
@@ -83,8 +75,7 @@ class StruttureNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  /// PATCH: aggiorna solo la priorità (azione rapida da chip cliccabile).
-  Future<void> patchPriorita(int id, String priorita) async {
+  Future<void> patchPriorita(String id, String priorita) async {
     final saved = await ApiService.patchPreferito(id, {'priorita': priorita});
     await DatabaseHelper.upsertPreferito(saved);
     final idx = _preferiti.indexWhere((x) => x.id == id);
@@ -92,8 +83,7 @@ class StruttureNotifier with ChangeNotifier {
     notifyListeners();
   }
 
-  /// DELETE: rimuove dai preferiti.
-  Future<void> deletePreferito(int id) async {
+  Future<void> deletePreferito(String id) async {
     await ApiService.deletePreferito(id);
     await DatabaseHelper.deletePreferito(id);
     _preferiti.removeWhere((p) => p.id == id);

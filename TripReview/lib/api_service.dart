@@ -3,16 +3,13 @@ import 'package:http/http.dart' as http;
 import 'model.dart';
 
 /// Servizio HTTP verso json-server.
-/// Cambia [baseUrl] con l'IP della macchina host se usi un dispositivo fisico.
-/// Esempio: 'http://192.168.1.100:3000'
+/// Su emulatore Android usare 10.0.2.2; su dispositivo fisico l'IP locale del PC.
 class ApiService {
-  static const String baseUrl = 'http://localhost:3000';
+  static const String baseUrl = 'http://10.0.2.2:3000';
 
   // ── STRUTTURE (sola lettura) ───────────────────────────────────────────────
 
   /// GET /strutture
-  /// Le strutture sono inserite manualmente nel db.json e non sono modificabili
-  /// dall'app: questo è l'unico endpoint usato sulle strutture.
   static Future<List<Struttura>> getStrutture() async {
     final res = await http
         .get(Uri.parse('$baseUrl/strutture'))
@@ -54,7 +51,7 @@ class ApiService {
     throw Exception('POST /preferiti fallito: ${res.statusCode}');
   }
 
-  /// PUT /preferiti/{id} — sostituzione completa (modifica note + priorità).
+  /// PUT /preferiti/{id}
   static Future<Preferito> updatePreferito(Preferito p) async {
     final res = await http
         .put(
@@ -68,8 +65,8 @@ class ApiService {
     throw Exception('PUT /preferiti/${p.id} fallito: ${res.statusCode}');
   }
 
-  /// PATCH /preferiti/{id} — aggiornamento parziale (es. solo priorità).
-  static Future<Preferito> patchPreferito(int id, Map<String, dynamic> fields) async {
+  /// PATCH /preferiti/{id}
+  static Future<Preferito> patchPreferito(String id, Map<String, dynamic> fields) async {
     final res = await http
         .patch(
           Uri.parse('$baseUrl/preferiti/$id'),
@@ -83,7 +80,7 @@ class ApiService {
   }
 
   /// DELETE /preferiti/{id}
-  static Future<void> deletePreferito(int id) async {
+  static Future<void> deletePreferito(String id) async {
     final res = await http
         .delete(Uri.parse('$baseUrl/preferiti/$id'))
         .timeout(const Duration(seconds: 10));

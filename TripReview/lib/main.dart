@@ -14,16 +14,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'TripReview',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
-        useMaterial3: true,
-      ),
-      home: ChangeNotifierProvider(
-        create: (_) => StruttureNotifier(),
-        child: const HomePage(),
+    // Il provider sta SOPRA il MaterialApp così tutte le route
+    // (HomePage, PreferitiScreen, FormPreferitoScreen) condividono
+    // la stessa istanza di StruttureNotifier.
+    return ChangeNotifierProvider(
+      create: (_) => StruttureNotifier(),
+      child: MaterialApp(
+        title: 'TripReview',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
+          useMaterial3: true,
+        ),
+        home: const HomePage(),
       ),
     );
   }
@@ -65,10 +68,7 @@ class _HomePageState extends State<HomePage> {
                 onPressed: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => ChangeNotifierProvider.value(
-                      value: notifier,
-                      child: const PreferitiScreen(),
-                    ),
+                    builder: (_) => const PreferitiScreen(),
                   ),
                 ),
               ),

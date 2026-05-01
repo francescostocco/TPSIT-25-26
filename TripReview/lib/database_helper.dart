@@ -3,17 +3,26 @@ import 'package:sqflite/sqflite.dart';
 import 'model.dart';
 
 /// Helper per il database SQLite locale, usato come cache.
-/// Stesso stile di zkeep: metodi statici, apertura del db a ogni chiamata.
 class DatabaseHelper {
   static Future<Database> _open() async {
     final path = join(await getDatabasesPath(), 'tripreview.db');
-    return openDatabase(path, version: 1, onCreate: _createTables);
+    // Versione 4: schema con id TEXT (json-server v1 usa id stringa).
+    return openDatabase(
+      path,
+      version: 4,
+      onCreate: _createTables,
+      onUpgrade: (db, oldV, newV) async {
+        await db.execute('DROP TABLE IF EXISTS strutture');
+        await db.execute('DROP TABLE IF EXISTS preferiti');
+        await _createTables(db, newV);
+      },
+    );
   }
 
   static Future<void> _createTables(Database db, int version) async {
     await db.execute('''
       CREATE TABLE strutture (
-        id          INTEGER PRIMARY KEY,
+        id          TEXT    PRIMARY KEY,
         nome        TEXT    NOT NULL,
         tipo        TEXT    NOT NULL,
         luogo       TEXT    NOT NULL,
@@ -29,8 +38,8 @@ class DatabaseHelper {
 
     await db.execute('''
       CREATE TABLE preferiti (
-        id           INTEGER PRIMARY KEY,
-        strutturaId  INTEGER NOT NULL,
+        id           TEXT    PRIMARY KEY,
+        strutturaId  TEXT    NOT NULL,
         note         TEXT    NOT NULL,
         priorita     TEXT    NOT NULL,
         dataAggiunta TEXT    NOT NULL
@@ -46,7 +55,6 @@ class DatabaseHelper {
     return rows.map(Struttura.fromMap).toList();
   }
 
-  /// Sovrascrive tutta la cache delle strutture con i dati freschi dal server.
   static Future<void> saveStrutture(List<Struttura> strutture) async {
     final db = await _open();
     final batch = db.batch();
@@ -83,7 +91,7 @@ class DatabaseHelper {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
-  static Future<void> deletePreferito(int id) async {
+  static Future<void> deletePreferito(String id) async {
     final db = await _open();
     await db.delete('preferiti', where: 'id = ?', whereArgs: [id]);
   }

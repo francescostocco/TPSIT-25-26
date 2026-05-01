@@ -1,6 +1,35 @@
+// Helper: converte un valore (String, int, num, null) in String.
+// json-server moderno restituisce gli id sempre come String,
+// ma manteniamo robustezza accettando anche int.
+String _toStr(dynamic v) {
+  if (v == null) return '';
+  if (v is String) return v;
+  return v.toString();
+}
+
+String? _toStrOrNull(dynamic v) {
+  if (v == null) return null;
+  return _toStr(v);
+}
+
+int _toInt(dynamic v) {
+  if (v == null) return 0;
+  if (v is int) return v;
+  if (v is num) return v.toInt();
+  if (v is String) return int.parse(v);
+  return 0;
+}
+
+bool _toBool(dynamic v) {
+  if (v is bool) return v;
+  if (v is int) return v == 1;
+  if (v is String) return v.toLowerCase() == 'true' || v == '1';
+  return false;
+}
+
 // ─── Modello Struttura (sola lettura dal server) ──────────────────────────────
 class Struttura {
-  int id;
+  String id;
   String nome;
   String tipo;
   String luogo;
@@ -27,20 +56,19 @@ class Struttura {
   });
 
   factory Struttura.fromJson(Map<String, dynamic> j) => Struttura(
-        id: j['id'] as int,
+        id: _toStr(j['id']),
         nome: j['nome'] as String,
         tipo: j['tipo'] as String,
         luogo: j['luogo'] as String,
-        stelle: j['stelle'] as int,
-        camere: j['camere'] as int,
-        piscina: j['piscina'] as bool,
-        wifi: j['wifi'] as bool,
-        colazione: j['colazione'] as bool,
-        parcheggio: j['parcheggio'] as bool,
+        stelle: _toInt(j['stelle']),
+        camere: _toInt(j['camere']),
+        piscina: _toBool(j['piscina']),
+        wifi: _toBool(j['wifi']),
+        colazione: _toBool(j['colazione']),
+        parcheggio: _toBool(j['parcheggio']),
         descrizione: j['descrizione'] as String,
       );
 
-  // Per SQLite i bool diventano 0/1
   Map<String, dynamic> toMap() => {
         'id': id,
         'nome': nome,
@@ -56,12 +84,12 @@ class Struttura {
       };
 
   factory Struttura.fromMap(Map<String, dynamic> m) => Struttura(
-        id: m['id'] as int,
+        id: _toStr(m['id']),
         nome: m['nome'] as String,
         tipo: m['tipo'] as String,
         luogo: m['luogo'] as String,
-        stelle: m['stelle'] as int,
-        camere: m['camere'] as int,
+        stelle: _toInt(m['stelle']),
+        camere: _toInt(m['camere']),
         piscina: m['piscina'] == 1,
         wifi: m['wifi'] == 1,
         colazione: m['colazione'] == 1,
@@ -72,11 +100,11 @@ class Struttura {
 
 // ─── Modello Preferito ────────────────────────────────────────────────────────
 class Preferito {
-  int? id;
-  int strutturaId;
-  String note;          // nota personale dell'utente
-  String priorita;      // "alta" | "media" | "bassa"
-  String dataAggiunta;  // YYYY-MM-DD
+  String? id;
+  String strutturaId;
+  String note;
+  String priorita;
+  String dataAggiunta;
 
   Preferito({
     this.id,
@@ -87,8 +115,8 @@ class Preferito {
   });
 
   factory Preferito.fromJson(Map<String, dynamic> j) => Preferito(
-        id: j['id'] as int?,
-        strutturaId: j['strutturaId'] as int,
+        id: _toStrOrNull(j['id']),
+        strutturaId: _toStr(j['strutturaId']),
         note: j['note'] as String,
         priorita: j['priorita'] as String,
         dataAggiunta: j['dataAggiunta'] as String,

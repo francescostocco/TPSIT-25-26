@@ -1,7 +1,7 @@
 {
   "strutture": [
     {
-      "id": 1,
+      "id": "1",
       "nome": "Hotel Bellavista",
       "tipo": "hotel",
       "luogo": "Roma",
@@ -14,7 +14,7 @@
       "descrizione": "Elegante hotel nel cuore della capitale con vista panoramica sul Colosseo."
     },
     {
-      "id": 2,
+      "id": "2",
       "nome": "B&B Toscana Felice",
       "tipo": "B&B",
       "luogo": "Firenze",
@@ -27,7 +27,7 @@
       "descrizione": "Accogliente B&B a gestione familiare immerso nelle colline toscane."
     },
     {
-      "id": 3,
+      "id": "3",
       "nome": "Camping Verde Lago",
       "tipo": "campeggio",
       "luogo": "Lago di Garda",
@@ -40,7 +40,7 @@
       "descrizione": "Campeggio con piazzole e bungalow, accesso diretto al lago."
     },
     {
-      "id": 4,
+      "id": "4",
       "nome": "Appartamento Sole",
       "tipo": "appartamento",
       "luogo": "Amalfi",
@@ -53,7 +53,7 @@
       "descrizione": "Appartamento di lusso con terrazza e vista mozzafiato sulla costiera."
     },
     {
-      "id": 5,
+      "id": "5",
       "nome": "Grand Hotel Venezia",
       "tipo": "hotel",
       "luogo": "Venezia",
@@ -66,7 +66,7 @@
       "descrizione": "Hotel storico affacciato sul Canal Grande, lusso e tradizione veneziana."
     },
     {
-      "id": 6,
+      "id": "6",
       "nome": "Casa Vacanze Etna",
       "tipo": "appartamento",
       "luogo": "Catania",
@@ -81,18 +81,12 @@
   ],
   "preferiti": [
     {
-      "id": 1,
-      "strutturaId": 1,
-      "note": "Da prenotare per l'anniversario",
-      "priorita": "alta",
-      "dataAggiunta": "2024-01-15"
-    },
-    {
-      "id": 2,
-      "strutturaId": 4,
-      "note": "Idea per una fuga romantica",
+      "id": "5423",
+      "strutturaId": "2",
+      "note": "Da visitare",
       "priorita": "media",
-      "dataAggiunta": "2024-02-03"
+      "dataAggiunta": "2026-05-01"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
