@@ -84,8 +84,15 @@
       "id": "5423",
       "strutturaId": "2",
       "note": "Da visitare",
-      "priorita": "media",
+      "priorita": "bassa",
       "dataAggiunta": "2026-05-01"
+    },
+    {
+      "id": "dcf0",
+      "strutturaId": "5",
+      "note": "Visto e molto bello",
+      "priorita": "media",
+      "dataAggiunta": "2026-05-02"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
